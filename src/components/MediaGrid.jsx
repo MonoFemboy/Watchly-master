@@ -1,4 +1,5 @@
 import React, { useEffect, useState, useRef } from 'react';
+import { motion, useReducedMotion } from 'framer-motion';
 import Card from './Card';
 import {
   fetchTrending,
@@ -30,13 +31,33 @@ const genresMap = {
   ],
 };
 
+const easeOut = [0.22, 0.1, 0.22, 1];
+
 const MediaGrid = ({ type = 'movie' }) => {
+  const reduceMotion = useReducedMotion();
   const [trending, setTrending] = useState([]);
   const [genreResults, setGenreResults] = useState({});
   const [searchQuery, setSearchQuery] = useState('');
   const [searchResults, setSearchResults] = useState([]);
   const searchTimeout = useRef(null);
   const scrollRefs = useRef({});
+
+  const heroMotion = reduceMotion
+    ? { initial: false }
+    : {
+        initial: { opacity: 0, y: 10 },
+        animate: { opacity: 1, y: 0 },
+        transition: { duration: 0.45, ease: easeOut },
+      };
+
+  const rowMotion = reduceMotion
+    ? { initial: false }
+    : {
+        initial: { opacity: 0, y: 14 },
+        whileInView: { opacity: 1, y: 0 },
+        viewport: { once: true, amount: 0.08, margin: '0px 0px -32px 0px' },
+        transition: { duration: 0.4, ease: easeOut },
+      };
 
   useEffect(() => {
     setTrending([]);
@@ -78,52 +99,81 @@ const MediaGrid = ({ type = 'movie' }) => {
   const typeLabel =
     type === 'tv' ? 'TV Shows' : type === 'anime' ? 'Anime' : 'Movies';
 
+  const searchMotion = reduceMotion
+    ? { initial: false }
+    : {
+        initial: { opacity: 0 },
+        animate: { opacity: 1 },
+        transition: { duration: 0.3, delay: 0.05, ease: easeOut },
+      };
+
   return (
     <div className="media-grid-wrapper">
-      <div className="media-hero">
+      <motion.div className="media-hero" {...heroMotion}>
         <h1 className="media-hero-title">Watchly</h1>
         <p className="media-hero-sub">Stream what you love. Save titles to My List with the star.</p>
-      </div>
+      </motion.div>
 
-      <input
+      <motion.input
         className="search-bar"
         placeholder={`Search ${typeLabel.toLowerCase()}...`}
         value={searchQuery}
         onChange={(e) => setSearchQuery(e.target.value)}
         aria-label="Search"
+        {...searchMotion}
       />
 
       {searchQuery && (
-        <div className="section">
+        <motion.div className="section" {...rowMotion} key="search-section">
           <h2 className="row-title">Search results</h2>
-          <div className="scroll-btn left" onClick={() => scroll('search', 'left')} aria-hidden="true">
+          <button
+            type="button"
+            className="scroll-btn left"
+            onClick={() => scroll('search', 'left')}
+            aria-label="Scroll search results left"
+          >
             ‹
-          </div>
-          <div className="scroll-btn right" onClick={() => scroll('search', 'right')} aria-hidden="true">
+          </button>
+          <button
+            type="button"
+            className="scroll-btn right"
+            onClick={() => scroll('search', 'right')}
+            aria-label="Scroll search results right"
+          >
             ›
-          </div>
+          </button>
           <div className="scroll-container" ref={(el) => (scrollRefs.current['search'] = el)}>
             {searchResults.map((item) => (
               <Card key={item.id} item={item} type={type} />
             ))}
           </div>
-        </div>
+        </motion.div>
       )}
 
-      <div className="section">
+      <motion.div className="section" {...rowMotion}>
         <h2 className="row-title">Trending</h2>
-        <div className="scroll-btn left" onClick={() => scroll('trending', 'left')} aria-hidden="true">
+        <button
+          type="button"
+          className="scroll-btn left"
+          onClick={() => scroll('trending', 'left')}
+          aria-label="Scroll trending left"
+        >
           ‹
-        </div>
-        <div className="scroll-btn right" onClick={() => scroll('trending', 'right')} aria-hidden="true">
+        </button>
+        <button
+          type="button"
+          className="scroll-btn right"
+          onClick={() => scroll('trending', 'right')}
+          aria-label="Scroll trending right"
+        >
           ›
-        </div>
+        </button>
         <div className="scroll-container" ref={(el) => (scrollRefs.current['trending'] = el)}>
           {trending.map((item) => (
             <Card key={item.id} item={item} type={type} />
           ))}
         </div>
-      </div>
+      </motion.div>
 
       {(genresMap[type] || []).map((genre) => {
         const idOrName = typeof genre === 'string' ? genre : genre.id;
@@ -131,20 +181,30 @@ const MediaGrid = ({ type = 'movie' }) => {
         const results = genreResults[idOrName] || [];
 
         return (
-          <div className="section" key={idOrName}>
+          <motion.div className="section" key={idOrName} {...rowMotion}>
             <h2 className="row-title">{label}</h2>
-            <div className="scroll-btn left" onClick={() => scroll(idOrName, 'left')} aria-hidden="true">
+            <button
+              type="button"
+              className="scroll-btn left"
+              onClick={() => scroll(idOrName, 'left')}
+              aria-label={`Scroll ${label} left`}
+            >
               ‹
-            </div>
-            <div className="scroll-btn right" onClick={() => scroll(idOrName, 'right')} aria-hidden="true">
+            </button>
+            <button
+              type="button"
+              className="scroll-btn right"
+              onClick={() => scroll(idOrName, 'right')}
+              aria-label={`Scroll ${label} right`}
+            >
               ›
-            </div>
+            </button>
             <div className="scroll-container" ref={(el) => (scrollRefs.current[idOrName] = el)}>
               {results.map((item) => (
                 <Card key={item.id} item={item} type={type} />
               ))}
             </div>
-          </div>
+          </motion.div>
         );
       })}
     </div>

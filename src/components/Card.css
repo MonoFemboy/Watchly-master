@@ -4,6 +4,7 @@
   transform-origin: center bottom;
   transition: transform 0.35s cubic-bezier(0.33, 0, 0.2, 1), box-shadow 0.35s ease;
   position: relative;
+  border-radius: 4px;
 }
 
 .media-card.portrait {
@@ -18,6 +19,13 @@
   border-radius: 4px;
   overflow: hidden;
   box-shadow: 0 4px 12px rgba(0, 0, 0, 0.45);
+  transition: box-shadow 0.35s ease;
+}
+
+@media (hover: hover) {
+  .media-card:hover .card-thumbnail {
+    box-shadow: 0 12px 28px rgba(0, 0, 0, 0.65);
+  }
 }
 
 .media-card.portrait .card-thumbnail {
@@ -51,6 +59,10 @@
   .media-card:hover {
     transform: scale(1.12);
     z-index: 20;
+  }
+  .media-card:active {
+    transform: scale(1.06);
+    transition-duration: 0.12s;
   }
   .media-card:hover .card-thumbnail img {
     transform: scale(1.05);
@@ -121,6 +133,15 @@
   transform: scale(1.06);
 }
 
+.watchlist-btn:active {
+  transform: scale(0.94);
+}
+
+.watchlist-btn:focus-visible {
+  outline: none;
+  box-shadow: 0 0 0 2px #141414, 0 0 0 4px rgba(255, 255, 255, 0.65);
+}
+
 .overlay-btn {
   border-radius: 50%;
 }
@@ -179,5 +200,14 @@
   }
   .media-card.landscape {
     width: 240px;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .media-card,
+  .card-thumbnail,
+  .card-thumbnail img,
+  .watchlist-btn {
+    transition-duration: 0.01ms !important;
   }
 }

@@ -60,11 +60,20 @@
   border-radius: 4px;
   color: #000;
   cursor: pointer;
-  transition: background 0.2s, transform 0.15s;
+  transition: background 0.2s ease, transform 0.15s ease;
 }
 
 .watch-now-btn:hover {
   background: rgba(255, 255, 255, 0.85);
+}
+
+.watch-now-btn:active {
+  transform: scale(0.98);
+}
+
+.watch-now-btn:focus-visible {
+  outline: none;
+  box-shadow: 0 0 0 2px #141414, 0 0 0 4px rgba(255, 255, 255, 0.5);
 }
 
 .my-list-detail-btn {
@@ -76,11 +85,20 @@
   border-radius: 4px;
   color: #fff;
   cursor: pointer;
-  transition: background 0.2s;
+  transition: background 0.2s ease, transform 0.15s ease;
 }
 
 .my-list-detail-btn:hover {
   background: rgba(109, 109, 110, 0.85);
+}
+
+.my-list-detail-btn:active {
+  transform: scale(0.98);
+}
+
+.my-list-detail-btn:focus-visible {
+  outline: none;
+  box-shadow: 0 0 0 2px #141414, 0 0 0 4px rgba(255, 200, 200, 0.35);
 }
 
 .page-content {

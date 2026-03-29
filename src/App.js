@@ -1,7 +1,7 @@
 // src/App.js
 import React from 'react';
 import { BrowserRouter as Router, Routes, Route, useLocation, useSearchParams } from 'react-router-dom';
-import { AnimatePresence, motion } from 'framer-motion';
+import { AnimatePresence, motion, useReducedMotion } from 'framer-motion';
 
 import Navbar from './components/Navbar';
 import MediaGrid from './components/MediaGrid';
@@ -14,6 +14,7 @@ const MainContent = () => {
   const location = useLocation();
   const [params] = useSearchParams();
   const type = params.get('type') || 'movie';
+  const reduceMotion = useReducedMotion();
 
   return (
     <>
@@ -23,10 +24,10 @@ const MainContent = () => {
         <motion.div
           key={location.pathname + type}
           className="motion-wrapper"
-          initial={{ opacity: 0 }}
+          initial={{ opacity: reduceMotion ? 1 : 0 }}
           animate={{ opacity: 1 }}
-          exit={{ opacity: 0 }}
-          transition={{ duration: 0.28, ease: 'easeInOut' }}
+          exit={{ opacity: reduceMotion ? 1 : 0 }}
+          transition={{ duration: reduceMotion ? 0 : 0.32, ease: [0.4, 0, 0.2, 1] }}
         >
           <Routes location={location}>
             <Route path="/" element={<MediaGrid type={type} />} />

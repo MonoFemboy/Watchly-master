@@ -1,9 +1,13 @@
 import React, { useState, useEffect, useCallback } from 'react';
+import { motion, useReducedMotion } from 'framer-motion';
 import Card from '../components/Card';
 import { getWatchlist } from '../utils/watchlist';
 import './MyList.css';
 
+const ease = [0.22, 0.1, 0.22, 1];
+
 const MyList = () => {
+  const reduceMotion = useReducedMotion();
   const [items, setItems] = useState([]);
 
   const refresh = useCallback(() => {
@@ -21,15 +25,42 @@ const MyList = () => {
     };
   }, [refresh]);
 
+  const headerMotion = reduceMotion
+    ? { initial: false }
+    : {
+        initial: { opacity: 0, y: 8 },
+        animate: { opacity: 1, y: 0 },
+        transition: { duration: 0.38, ease },
+      };
+
+  const contentMotion = reduceMotion
+    ? { initial: false }
+    : {
+        initial: { opacity: 0 },
+        animate: { opacity: 1 },
+        transition: { duration: 0.35, delay: 0.06, ease },
+      };
+
   return (
     <div className="my-list-page">
-      <h1 className="my-list-heading">My List</h1>
+      <motion.h1 className="my-list-heading" {...headerMotion}>
+        My List
+      </motion.h1>
       {items.length === 0 ? (
-        <p className="my-list-empty">
+        <motion.p className="my-list-empty" {...contentMotion}>
           Your list is empty. Save shows and films by clicking the star on a poster.
-        </p>
+        </motion.p>
       ) : (
-        <div className="my-list-row">
+        <motion.div
+          className="my-list-row"
+          {...(reduceMotion
+            ? { initial: false }
+            : {
+                initial: { opacity: 0 },
+                animate: { opacity: 1 },
+                transition: { duration: 0.35, ease },
+              })}
+        >
           {items.map((item) => (
             <Card
               key={`${item.type}-${item.id}`}
@@ -37,7 +68,7 @@ const MyList = () => {
               type={item.type || 'movie'}
             />
           ))}
-        </div>
+        </motion.div>
       )}
     </div>
   );
