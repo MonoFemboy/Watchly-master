@@ -1,13 +1,15 @@
-// src/App.js
 import React from 'react';
 import { BrowserRouter as Router, Routes, Route, useLocation, useSearchParams } from 'react-router-dom';
 import { AnimatePresence, motion, useReducedMotion } from 'framer-motion';
 
-import Navbar from './components/Navbar';
-import MediaGrid from './components/MediaGrid';
-import WatchPage from './components/WatchPage';
-import MediaDetailPage from './components/MediaDetailPage';
+import Navbar from './components/layout/Navbar';
+import HomePage from './components/home/HomePage';
+import WatchPage from './components/watch/WatchPage';
+import MediaDetailPage from './components/details/MediaDetailPage';
 import MyList from './pages/MyList';
+import Calendar from './pages/Calendar';
+import WatchHistory from './pages/WatchHistory';
+import GenrePage from './pages/GenrePage';
 import './App.css';
 
 const MainContent = () => {
@@ -30,8 +32,11 @@ const MainContent = () => {
           transition={{ duration: reduceMotion ? 0 : 0.32, ease: [0.4, 0, 0.2, 1] }}
         >
           <Routes location={location}>
-            <Route path="/" element={<MediaGrid type={type} />} />
+            <Route path="/" element={<HomePage type={type} />} />
             <Route path="/my-list" element={<MyList />} />
+            <Route path="/calendar" element={<Calendar />} />
+            <Route path="/history" element={<WatchHistory />} />
+            <Route path="/genre/:genreName" element={<GenrePage />} />
             <Route path="/watch/:type/:id/:season?/:episode?" element={<WatchPage />} />
             <Route path="/details/:type/:id" element={<MediaDetailPage />} />
           </Routes>

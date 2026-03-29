@@ -23,6 +23,12 @@ export default function Navbar() {
     if (location.pathname === '/my-list') {
       return kind === 'list' ? 'nav-link active' : 'nav-link';
     }
+    if (location.pathname === '/calendar') {
+      return kind === 'calendar' ? 'nav-link active' : 'nav-link';
+    }
+    if (location.pathname === '/history') {
+      return kind === 'history' ? 'nav-link active' : 'nav-link';
+    }
     if (location.pathname !== '/') {
       return 'nav-link';
     }
@@ -34,6 +40,9 @@ export default function Navbar() {
     }
     if (kind === 'tv') {
       return browseType === 'tv' ? 'nav-link active' : 'nav-link';
+    }
+    if (kind === 'anime') {
+      return browseType === 'anime' ? 'nav-link active' : 'nav-link';
     }
     return 'nav-link';
   };
@@ -54,8 +63,17 @@ export default function Navbar() {
           <Link to="/?type=tv" className={navClass('tv')}>
             TV Shows
           </Link>
+          <Link to="/?type=anime" className={navClass('anime')}>
+            Anime
+          </Link>
           <Link to="/my-list" className={navClass('list')}>
             My List
+          </Link>
+          <Link to="/calendar" className={navClass('calendar')}>
+            Airing today
+          </Link>
+          <Link to="/history" className={navClass('history')}>
+            Continue watching
           </Link>
         </nav>
       </div>

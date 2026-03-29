@@ -1,10 +1,15 @@
-// src/api.js
 const TMDB_API_KEY = 'd0629388a91b8c64fa792bb0988fa654';
 const BASE_URL = 'https://api.themoviedb.org/3';
 const ANILIST_URL = 'https://graphql.anilist.co';
 
 export const fetchTrending = async (type = 'movie') => {
   const res = await fetch(`${BASE_URL}/trending/${type}/week?api_key=${TMDB_API_KEY}`);
+  const data = await res.json();
+  return data.results || [];
+};
+
+export const fetchAiringTodayTV = async () => {
+  const res = await fetch(`${BASE_URL}/tv/airing_today?api_key=${TMDB_API_KEY}`);
   const data = await res.json();
   return data.results || [];
 };
@@ -104,7 +109,6 @@ export const fetchMediaDetails = async (type, id) => {
     const json = await res.json();
     const media = json.data?.Media || null;
 
-    // Add fallback rating
     return {
       ...media,
       rating: media?.isAdult ? '18+' : 'NR'
@@ -135,7 +139,7 @@ export const fetchMediaDetails = async (type, id) => {
 };
 
 export const fetchSimilarMedia = async (type, id) => {
-  if (type === 'anime') return []; // Optional: add Anilist recommendations
+  if (type === 'anime') return [];
   const res = await fetch(`${BASE_URL}/${type}/${id}/similar?api_key=${TMDB_API_KEY}`);
   const data = await res.json();
   return data.results || [];

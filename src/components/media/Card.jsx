@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useMemo } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { isInWatchlist, toggleWatchlistItem } from '../utils/watchlist';
+import { isInWatchlist, toggleWatchlistItem } from '../../utils/watchlist';
 import './Card.css';
 
 const Card = ({ item, type }) => {

@@ -1,61 +1,51 @@
 import React, { useEffect, useState } from 'react';
 import { useParams, Link } from 'react-router-dom';
-import {
-  fetchAllByGenre,
-  fetchAnimeByGenre
-} from '../api';
-import Card from '../components/Card';
+import { fetchAllByGenre, fetchAnimeByGenre } from '../services/api';
+import { GENRE_PAGE_MAP } from '../constants/genres';
+import Card from '../components/media/Card';
+import './SecondaryPage.css';
 
 const GenrePage = () => {
   const { genreName } = useParams();
   const [items, setItems] = useState([]);
   const [type, setType] = useState('movie');
-  const [genreId, setGenreId] = useState(null);
-
-  const genreMap = {
-    movie: {
-      Action: 28,
-      Comedy: 35,
-      Drama: 18,
-      Fantasy: 14
-    },
-    tv: {
-      'Action & Adventure': 10759,
-      Comedy: 35,
-      Drama: 18,
-      Animation: 16
-    }
-  };
 
   useEffect(() => {
     const fetchData = async () => {
+      setItems([]);
       if (type === 'anime') {
         const anime = await fetchAnimeByGenre(genreName);
         setItems(anime);
-      } else {
-        const map = genreMap[type];
-        const foundId = Object.entries(map).find(([_, name]) => name === genreName)?.[0];
-        setGenreId(foundId);
-        if (foundId) {
-          const result = await fetchAllByGenre(foundId, type);
-          setItems(result);
-        }
+        return;
+      }
+      const map = GENRE_PAGE_MAP[type];
+      const genreId = map?.[genreName];
+      if (genreId != null) {
+        const result = await fetchAllByGenre(type, genreId);
+        setItems(result);
       }
     };
 
     fetchData();
   }, [genreName, type]);
 
-  return (
-    <div style={{ padding: '16px' }}>
-      <Link to="/">← Back to Browse</Link>
-      <h1 style={{ marginTop: '16px' }}>{genreName}</h1>
+  const decodedName = decodeURIComponent(genreName || '');
 
-      <div className="tabs" style={{ marginBottom: '24px' }}>
+  return (
+    <div className="secondary-page">
+      <Link to="/" className="secondary-page__back">
+        ← Back to home
+      </Link>
+      <h1 className="secondary-page__title">{decodedName}</h1>
+
+      <div className="secondary-page__tabs" role="tablist" aria-label="Browse type">
         {['movie', 'tv', 'anime'].map((t) => (
           <button
             key={t}
-            className={`tab-button ${type === t ? 'active' : ''}`}
+            type="button"
+            role="tab"
+            aria-selected={type === t}
+            className={`secondary-page__tab ${type === t ? 'active' : ''}`}
             onClick={() => setType(t)}
           >
             {t === 'movie' ? 'Movies' : t === 'tv' ? 'TV Shows' : 'Anime'}
@@ -63,9 +53,9 @@ const GenrePage = () => {
         ))}
       </div>
 
-      <div className="horizontal-scroll" style={{ flexWrap: 'wrap', gap: '12px' }}>
+      <div className="secondary-page__grid">
         {items.map((item) => (
-          <Card key={item.id + '_genre'} item={item} type={type} />
+          <Card key={`${item.id}-genre`} item={item} type={type} />
         ))}
       </div>
     </div>

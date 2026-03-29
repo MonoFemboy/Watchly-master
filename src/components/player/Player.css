@@ -1,0 +1,56 @@
+.player-container {
+  position: relative;
+  padding-bottom: 56.25%;
+  height: 0;
+  margin-top: 1rem;
+  border-radius: var(--nf-radius);
+  overflow: hidden;
+  box-shadow: var(--nf-shadow-lg);
+}
+
+.player-iframe {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  border: 0;
+}
+
+.player-share-btn {
+  position: absolute;
+  top: 12px;
+  right: 12px;
+  z-index: 2;
+  background: rgba(0, 0, 0, 0.65);
+  color: var(--nf-white);
+  border: 1px solid var(--nf-glass-border);
+  font-size: 1.1rem;
+  padding: 8px 12px;
+  border-radius: var(--nf-radius);
+  cursor: pointer;
+  min-width: 44px;
+  min-height: 44px;
+  transition: background 0.2s ease;
+}
+
+.player-share-btn:hover {
+  background: rgba(40, 40, 40, 0.95);
+}
+
+.player-share-btn:focus-visible {
+  outline: none;
+  box-shadow: var(--nf-focus-ring);
+}
+
+.share-toast {
+  position: absolute;
+  top: 58px;
+  right: 12px;
+  background: var(--nf-red);
+  color: var(--nf-white);
+  padding: 6px 10px;
+  font-size: 0.8rem;
+  border-radius: var(--nf-radius);
+  z-index: 2;
+}

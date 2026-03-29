@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react';
-import { fetchAiringTodayTV } from '../api';
 import { Link } from 'react-router-dom';
+import { fetchAiringTodayTV } from '../services/api';
+import './SecondaryPage.css';
 
 const Calendar = () => {
   const [airing, setAiring] = useState([]);
@@ -14,35 +15,31 @@ const Calendar = () => {
   }, []);
 
   return (
-    <div style={{ padding: '16px' }}>
-      <Link to="/">← Back to Browse</Link>
-      <h1 style={{ marginTop: '16px' }}>📆 TV Shows Airing Today</h1>
+    <div className="secondary-page">
+      <Link to="/" className="secondary-page__back">
+        ← Back to home
+      </Link>
+      <h1 className="secondary-page__title">TV airing today</h1>
 
       {airing.length === 0 ? (
-        <p style={{ color: '#aaa' }}>No shows airing today.</p>
+        <p className="secondary-page__empty">No shows airing today.</p>
       ) : (
-        <div className="horizontal-scroll" style={{ flexWrap: 'wrap', gap: '16px' }}>
+        <div className="secondary-page__air-grid">
           {airing.map((show) => (
-            <div key={show.id} style={{ minWidth: '180px' }}>
+            <article key={show.id} className="secondary-page__air-card">
               <img
-                src={`https://image.tmdb.org/t/p/w300${show.poster_path}`}
-                alt={show.name}
-                style={{
-                  width: '100%',
-                  borderRadius: '6px',
-                  objectFit: 'cover',
-                  marginBottom: '8px',
-                }}
+                src={`https://image.tmdb.org/t/p/w342${show.poster_path}`}
+                alt={show.name || ''}
+                className="secondary-page__air-poster"
               />
-              <div style={{ fontSize: '0.95rem', fontWeight: '500', color: '#fff' }}>
-                {show.name}
-              </div>
+              <div className="secondary-page__air-name">{show.name}</div>
               {show.next_episode_to_air && (
-                <div style={{ fontSize: '0.8rem', color: '#bbb' }}>
-                  S{show.next_episode_to_air.season_number}E{show.next_episode_to_air.episode_number} — {show.next_episode_to_air.name}
+                <div className="secondary-page__air-ep">
+                  S{show.next_episode_to_air.season_number}E{show.next_episode_to_air.episode_number}
+                  {show.next_episode_to_air.name ? ` — ${show.next_episode_to_air.name}` : ''}
                 </div>
               )}
-            </div>
+            </article>
           ))}
         </div>
       )}

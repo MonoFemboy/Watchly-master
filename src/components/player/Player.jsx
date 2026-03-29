@@ -1,29 +1,28 @@
-// src/components/Player.js
-import React, { useEffect, useState } from "react";
-import { FaShareAlt } from "react-icons/fa";
-import "./Player.css";
+import React, { useEffect, useState } from 'react';
+import { FaShareAlt } from 'react-icons/fa';
+import './Player.css';
 
 const Player = ({ src }) => {
   const [copied, setCopied] = useState(false);
 
   useEffect(() => {
     const handleMessage = (event) => {
-      if (typeof event.data === "string") {
+      if (typeof event.data === 'string') {
         try {
           const message = JSON.parse(event.data);
           if (message?.id && message?.type) {
             const key = `progress_${message.type}_${message.id}`;
             localStorage.setItem(key, JSON.stringify(message));
-            console.log("Progress saved to localStorage:", message);
+            console.log('Progress saved to localStorage:', message);
           }
         } catch (e) {
-          console.warn("Invalid message from iframe:", event.data);
+          console.warn('Invalid message from iframe:', event.data);
         }
       }
     };
 
-    window.addEventListener("message", handleMessage);
-    return () => window.removeEventListener("message", handleMessage);
+    window.addEventListener('message', handleMessage);
+    return () => window.removeEventListener('message', handleMessage);
   }, []);
 
   const handleShare = () => {
@@ -35,11 +34,10 @@ const Player = ({ src }) => {
 
   if (!src) return null;
 
-  // Decide sandbox dynamically
-  const isVidEasy = src.includes("videasy.net");
+  const isVidEasy = src.includes('videasy.net');
   const sandboxProps = isVidEasy
-    ? undefined // no sandbox for videasy (it breaks otherwise)
-    : "allow-scripts allow-same-origin allow-forms allow-presentation";
+    ? undefined
+    : 'allow-scripts allow-same-origin allow-forms allow-presentation';
 
   return (
     <div className="player-container">
@@ -62,6 +60,7 @@ const Player = ({ src }) => {
       </div>
 
       <button
+        type="button"
         className="player-share-btn"
         onClick={handleShare}
         title="Copy share link"

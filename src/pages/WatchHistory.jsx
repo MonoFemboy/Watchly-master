@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
-import Card from '../components/Card';
+import Card from '../components/media/Card';
+import './SecondaryPage.css';
 
 const WatchHistory = () => {
   const [history, setHistory] = useState([]);
@@ -20,20 +21,24 @@ const WatchHistory = () => {
     setHistory(Object.values(current).sort((a, b) => b.updatedAt - a.updatedAt));
   };
 
-  const filtered = filter === 'all'
-    ? history
-    : history.filter((item) => item.type === filter);
+  const filtered =
+    filter === 'all' ? history : history.filter((item) => item.type === filter);
 
   return (
-    <div style={{ padding: '16px' }}>
-      <Link to="/">← Back to Browse</Link>
-      <h1 style={{ marginTop: '16px' }}>📜 Watch History</h1>
+    <div className="secondary-page">
+      <Link to="/" className="secondary-page__back">
+        ← Back to home
+      </Link>
+      <h1 className="secondary-page__title">Continue watching</h1>
 
-      <div className="tabs" style={{ marginBottom: '20px' }}>
+      <div className="secondary-page__tabs" role="tablist" aria-label="Filter history">
         {['all', 'movie', 'tv', 'anime'].map((t) => (
           <button
             key={t}
-            className={`tab-button ${filter === t ? 'active' : ''}`}
+            type="button"
+            role="tab"
+            aria-selected={filter === t}
+            className={`secondary-page__tab ${filter === t ? 'active' : ''}`}
             onClick={() => setFilter(t)}
           >
             {t === 'all' ? 'All' : t.charAt(0).toUpperCase() + t.slice(1)}
@@ -42,39 +47,24 @@ const WatchHistory = () => {
       </div>
 
       {filtered.length === 0 ? (
-        <p style={{ color: '#aaa' }}>No watch history yet.</p>
+        <p className="secondary-page__empty">No watch history yet. Playback progress is saved from the embedded player when available.</p>
       ) : (
-        <div className="horizontal-scroll" style={{ flexWrap: 'wrap', gap: '12px' }}>
+        <div className="secondary-page__grid">
           {filtered.map((item) => (
-            <div key={item.id + '_hist'} style={{ position: 'relative' }}>
+            <div key={`${item.type}-${item.id}`} className="secondary-page__history-item">
               <Card item={item} type={item.type} />
-              <div style={{ position: 'absolute', top: 8, right: 8 }}>
+              <div className="secondary-page__history-actions">
                 <button
+                  type="button"
+                  className="secondary-page__btn secondary-page__btn--primary"
                   onClick={() => navigate(`/watch/${item.type}/${item.id}`)}
-                  style={{
-                    padding: '4px 8px',
-                    fontSize: '0.75rem',
-                    marginRight: '4px',
-                    backgroundColor: '#8B5CF6',
-                    color: 'white',
-                    border: 'none',
-                    borderRadius: '4px',
-                    cursor: 'pointer'
-                  }}
                 >
                   Resume
                 </button>
                 <button
+                  type="button"
+                  className="secondary-page__btn secondary-page__btn--ghost"
                   onClick={() => handleRemove(item.id)}
-                  style={{
-                    padding: '4px 8px',
-                    fontSize: '0.75rem',
-                    backgroundColor: '#444',
-                    color: 'white',
-                    border: 'none',
-                    borderRadius: '4px',
-                    cursor: 'pointer'
-                  }}
                 >
                   Remove
                 </button>
