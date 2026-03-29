@@ -1,3 +1,4 @@
+import { env } from 'cloudflare:workers'
 const TMDB_API_KEY = env.TMDB_API_KEY;
 const BASE_URL = 'https://api.themoviedb.org/3';
 const ANILIST_URL = 'https://graphql.anilist.co';
