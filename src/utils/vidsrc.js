@@ -1,5 +1,5 @@
 // src/utils/vidsrc.js
-const BASE_DOMAIN = "https://vidsrc.xyz"; // you can rotate if needed
+const BASE_DOMAIN = "https://vidsrc-embed.ru"; // you can rotate if needed
 
 export function getVidSrcEmbed({ type, imdb, tmdb, season, episode, subUrl, dsLang, autoplay, autonext }) {
   let url = `${BASE_DOMAIN}/embed`;
