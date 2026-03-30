@@ -1,9 +1,11 @@
 // src/components/WatchPage.jsx
-import React, { useEffect, useState, useMemo } from "react";
+import React, { useEffect, useState, useMemo, useRef } from "react";
 import { useParams, useNavigate } from "react-router-dom";
-import { fetchMediaDetails } from "../api";
+import { fetchMediaDetails, fetchSimilarMedia } from "../api";
+import { recordWatchStart } from "../utils/stats";
 import { getVidSrcUrl, getVidEasyUrl } from "../utils/providers";
 import Player from "./Player";
+import Card from "./Card";
 import "./WatchPage.css";
 
 const WatchPage = () => {
@@ -15,6 +17,8 @@ const WatchPage = () => {
   const [selectedEpisode, setSelectedEpisode] = useState(Number(episode) || 1);
   const [episodeList, setEpisodeList] = useState([]);
   const [provider, setProvider] = useState("vidsrc");
+  const [similar, setSimilar] = useState([]);
+  const similarScrollRef = useRef(null);
 
   // Fetch media details
   useEffect(() => {
@@ -38,6 +42,29 @@ const WatchPage = () => {
     });
   }, [type, id, selectedSeason]);
 
+  useEffect(() => {
+    let cancelled = false;
+    fetchSimilarMedia(type, id)
+      .then((items) => {
+        if (!cancelled) setSimilar(items || []);
+      })
+      .catch(() => {
+        if (!cancelled) setSimilar([]);
+      });
+    return () => {
+      cancelled = true;
+    };
+  }, [type, id]);
+
+  const scrollSimilar = (dir) => {
+    const el = similarScrollRef.current;
+    if (!el) return;
+    el.scrollBy({
+      left: dir === "left" ? -window.innerWidth * 0.8 : window.innerWidth * 0.8,
+      behavior: "smooth",
+    });
+  };
+
   // Handle season change
   const handleSeasonClick = (seasonNum) => {
     setSelectedSeason(seasonNum);
@@ -53,6 +80,15 @@ const WatchPage = () => {
 
   const title =
     media?.title?.romaji || media?.title || media?.name || "Loading...";
+
+  useEffect(() => {
+    if (!media) return;
+    try {
+      recordWatchStart({ type, id, title });
+    } catch {
+      // ignore stats errors (private mode / storage blocked)
+    }
+  }, [type, id, title, media]);
 
   // Memoize video URL to recalc when dependencies change
   const videoSrc = useMemo(() => {
@@ -78,7 +114,10 @@ const WatchPage = () => {
 
   return (
     <div className="watch-page">
-      <h2 className="watch-title">{title}</h2>
+      <div className="watch-header">
+        <h2 className="watch-title">{title}</h2>
+        <p className="watch-subtitle">Choose a provider, then press play.</p>
+      </div>
 
       {/* Provider Switcher */}
       <div className="provider-switcher">
@@ -141,6 +180,33 @@ const WatchPage = () => {
               </div>
             </div>
           )}
+        </div>
+      )}
+
+      {type !== "anime" && similar.length > 0 && (
+        <div className="watch-recs">
+          <h3 className="watch-recs-title">Recommended for you</h3>
+          <button
+            type="button"
+            className="scroll-btn left"
+            onClick={() => scrollSimilar("left")}
+            aria-label="Scroll recommendations left"
+          >
+            ‹
+          </button>
+          <button
+            type="button"
+            className="scroll-btn right"
+            onClick={() => scrollSimilar("right")}
+            aria-label="Scroll recommendations right"
+          >
+            ›
+          </button>
+          <div className="scroll-container" ref={similarScrollRef}>
+            {similar.map((item) => (
+              <Card key={item.id} item={item} type={type} />
+            ))}
+          </div>
         </div>
       )}
     </div>

@@ -35,12 +35,6 @@ const Player = ({ src }) => {
 
   if (!src) return null;
 
-  // Decide sandbox dynamically
-  const isVidEasy = src.includes("videasy.net");
-  const sandboxProps = isVidEasy
-    ? undefined // no sandbox for videasy (it breaks otherwise)
-    : "allow-scripts allow-same-origin allow-forms allow-presentation";
-
   return (
     <div className="player-container">
       <div
@@ -55,8 +49,8 @@ const Player = ({ src }) => {
           className="player-iframe"
           frameBorder="0"
           allowFullScreen
-          allow="autoplay; encrypted-media"
-          {...(sandboxProps ? { sandbox: sandboxProps } : {})}
+          allow="autoplay; fullscreen; encrypted-media; picture-in-picture"
+          referrerPolicy="no-referrer"
           title="Video Player"
         />
       </div>

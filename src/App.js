@@ -8,6 +8,7 @@ import MediaGrid from './components/MediaGrid';
 import WatchPage from './components/WatchPage';
 import MediaDetailPage from './components/MediaDetailPage';
 import MyList from './pages/MyList';
+import Dashboard from './pages/Dashboard';
 import './App.css';
 
 const MainContent = () => {
@@ -34,6 +35,7 @@ const MainContent = () => {
             <Route path="/my-list" element={<MyList />} />
             <Route path="/watch/:type/:id/:season?/:episode?" element={<WatchPage />} />
             <Route path="/details/:type/:id" element={<MediaDetailPage />} />
+            <Route path="/dashboard" element={<Dashboard />} />
           </Routes>
         </motion.div>
       </AnimatePresence>

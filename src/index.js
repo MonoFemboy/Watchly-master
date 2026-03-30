@@ -5,7 +5,14 @@ import './index.css';
 import App from './App';
 import reportWebVitals from './reportWebVitals';
 import * as serviceWorkerRegistration from './serviceWorkerRegistration';
+import { recordVisit } from './utils/stats';
 serviceWorkerRegistration.register(); // instead of unregister()
+
+try {
+  recordVisit();
+} catch {
+  // ignore stats errors (private mode / storage blocked)
+}
 
 
 const root = ReactDOM.createRoot(document.getElementById('root'));
