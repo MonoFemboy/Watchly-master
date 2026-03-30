@@ -1,9 +1,10 @@
 import React, { useState, useEffect, useCallback } from 'react';
 import { motion, useReducedMotion } from 'framer-motion';
-import Card from '../components/media/Card';
+import Card from '../components/Card';
 import { getWatchlist } from '../utils/watchlist';
-import { EASE_OUT } from '../constants/motion';
 import './MyList.css';
+
+const ease = [0.22, 0.1, 0.22, 1];
 
 const MyList = () => {
   const reduceMotion = useReducedMotion();
@@ -29,7 +30,7 @@ const MyList = () => {
     : {
         initial: { opacity: 0, y: 8 },
         animate: { opacity: 1, y: 0 },
-        transition: { duration: 0.38, ease: EASE_OUT },
+        transition: { duration: 0.38, ease },
       };
 
   const contentMotion = reduceMotion
@@ -37,7 +38,7 @@ const MyList = () => {
     : {
         initial: { opacity: 0 },
         animate: { opacity: 1 },
-        transition: { duration: 0.35, delay: 0.06, ease: EASE_OUT },
+        transition: { duration: 0.35, delay: 0.06, ease },
       };
 
   return (
@@ -57,7 +58,7 @@ const MyList = () => {
             : {
                 initial: { opacity: 0 },
                 animate: { opacity: 1 },
-                transition: { duration: 0.35, ease: EASE_OUT },
+                transition: { duration: 0.35, ease },
               })}
         >
           {items.map((item) => (

@@ -1,0 +1,89 @@
+/* src/components/WatchPage.css */
+
+.watch-page {
+  padding: 24px;
+  color: #f3f4f6;
+}
+
+.watch-title {
+  font-size: 1.5rem;
+  font-weight: 600;
+  margin-bottom: 16px;
+}
+
+.selectors-wrapper {
+  margin-top: 30px;
+}
+
+.selector-group {
+  margin-bottom: 20px;
+}
+
+.selector-group h3 {
+  font-size: 1rem;
+  margin-bottom: 10px;
+  color: #e2e8f0;
+}
+
+.selector-container {
+  display: flex;
+  flex-wrap: nowrap;
+  gap: 12px;
+  overflow-x: auto;
+  scrollbar-width: thin;
+  scrollbar-color: #4b5563 transparent;
+  padding-bottom: 4px;
+}
+
+.selector-container::-webkit-scrollbar {
+  height: 6px;
+}
+.selector-container::-webkit-scrollbar-thumb {
+  background-color: #4b5563;
+  border-radius: 4px;
+}
+
+.selector-btn {
+  padding: 6px 14px;
+  border-radius: 6px;
+  border: 1px solid #4b5563;
+  background-color: #1f2937;
+  color: #f1f5f9;
+  font-size: 0.9rem;
+  cursor: pointer;
+  white-space: nowrap;
+  transition: background 0.2s ease, transform 0.1s ease;
+}
+
+.selector-btn:hover {
+  background-color: #374151;
+  transform: scale(1.05);
+}
+
+.selector-btn.active {
+  background-color: #8B5CF6;
+  border-color: #8B5CF6;
+  color: white;
+  font-weight: bold;
+}
+
+.ep-name {
+  font-size: 0.8rem;
+  color: #9ca3af;
+  margin-left: 4px;
+}
+
+@media (max-width: 768px) {
+  .watch-page {
+    padding: 16px;
+  }
+
+  .selector-container {
+    gap: 8px;
+  }
+
+  .selector-btn {
+    font-size: 0.8rem;
+    padding: 5px 10px;
+  }
+}
