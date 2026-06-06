@@ -1,5 +1,5 @@
 // src/utils/providers.js
-const VIDSRCDOMAIN = "https://vidsrc.xyz"; // you can swap if one goes down
+const VIDSRCDOMAIN = "https://vidsrc.ru"; // you can swap if one goes down
 const VIDEASYDOMAIN = "https://player.videasy.net"; // adjust if different
 
 export function getVidSrcUrl({ type = "movie", imdb, tmdb, season, episode, dsLang, subUrl, autoplay = true, autonext = false }) {
