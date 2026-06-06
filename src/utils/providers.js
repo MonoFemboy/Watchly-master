@@ -3,7 +3,7 @@ const VIDSRCDOMAIN = "https://vidsrc.ru"; // you can swap if one goes down
 const VIDEASYDOMAIN = "https://player.videasy.net"; // adjust if different
 
 export function getVidSrcUrl({ type = "movie", imdb, tmdb, season, episode, dsLang, subUrl, autoplay = true, autonext = false }) {
-  let url = `${VIDSRCDOMAIN}/embed/${type}`;
+  let url = `${VIDSRCDOMAIN}/${type}`;
 
   const params = new URLSearchParams();
   if (imdb) params.append("imdb", imdb);
